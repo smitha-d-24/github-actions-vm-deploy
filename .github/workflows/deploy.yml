@@ -1,0 +1,31 @@
+name: Deploy Configuration to VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VM_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy Script on VM
+        run: |
+          ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
+            cd ~/smitha-configdeploy-project
+            git pull origin main
+            chmod +x deploy.sh
+            ./deploy.sh
+          EOF
