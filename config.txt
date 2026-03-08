@@ -1,0 +1,3 @@
+app_name=configdeploy
+environment=production
+version=1
