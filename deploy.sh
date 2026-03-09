@@ -11,4 +11,4 @@ sudo apt install nginx -y
 echo "Restarting nginx service..."
 sudo systemctl restart nginx
 
-echo "Deployment completed successfully."
+echo "Deployment test successful" >> test.txt
